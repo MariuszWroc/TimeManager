@@ -1,0 +1,21 @@
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	compile fileTree(dir: 'libs', include: '*.jar')
+	testCompile 'junit:junit:4.12'
+}
+
+/* Verify all jar dependency */
+task listJars {
+    configurations.compile.each {               
+        File file -> println file.name        
+    }
+}
+
