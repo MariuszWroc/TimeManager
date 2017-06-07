@@ -14,8 +14,8 @@ import com.jgoodies.forms.layout.FormLayout;
  */
 @SuppressWarnings({ "serial", "deprecation" })
 public final class MainPanel extends JPanel {
-	private ReportPanel reportPanel;
-	private ButtonPanel buttonPanel;
+	private final ReportPanel reportPanel;
+	private final ButtonPanel buttonPanel;
 	
 	public MainPanel() {
 		this.reportPanel = new ReportPanel();
@@ -38,16 +38,8 @@ public final class MainPanel extends JPanel {
 		return reportPanel;
 	}
 
-	public void setReportPanel(ReportPanel reportPanel) {
-		this.reportPanel = reportPanel;
-	}
-
 	public ButtonPanel getButtonPanel() {
 		return buttonPanel;
 	}
 
-	public void setButtonPanel(ButtonPanel buttonPanel) {
-		this.buttonPanel = buttonPanel;
-	}
-	
 }

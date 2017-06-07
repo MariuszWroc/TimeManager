@@ -7,13 +7,14 @@ import static com.desktopmanager.constant.FrameSettings.WIDTH;
 import java.awt.Dimension;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JFileChooser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.desktopmanager.model.Report;
+import com.desktopmanager.model.Event;
 import com.desktopmanager.persistence.ReportDao;
 import com.desktopmanager.persistence.ReportEntity;
 import com.desktopmanager.view.MainPanel;
@@ -29,13 +30,15 @@ public class ApplicationController {
 	private static final int NO_ROW_TO_SELECT = -1;
 	private static final String DEFAULT_CATALOG = "user.home";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class.getName());
-	private Report reportModel;
+	private Event model;
 	private ViewMapper view;
-	ReportDao dao = new ReportDao();
+	private ReportEntity entity;
+	private AtomicInteger counter = new AtomicInteger(1);
 
 	public ApplicationController() {
-		reportModel = new Report();
-		view = new ViewMapper(reportModel);
+		model = new Event();
+		entity = new ReportEntity(counter.incrementAndGet());
+		view = new ViewMapper(model, entity);
 		view.setMinimumSize(new Dimension(HEIGHT.getDimention(), WIDTH.getDimention()));
 		init();
 	}
@@ -52,13 +55,13 @@ public class ApplicationController {
 
 		view.getMainPanel().getReportPanel().getReportTable().getSelectionModel().addListSelectionListener(event -> {
 			if (view.getMainPanel().getReportPanel().getReportTable().getSelectedRow() > NO_ROW_TO_SELECT) {
-				reportModel.setActionName(NO_BUTTON_ACTION);
+				model.setActionName(NO_BUTTON_ACTION);
 				String name = view.getMainPanel().getReportPanel().getReportTable().getValueAt(view.getMainPanel().getReportPanel().getReportTable().getSelectedRow(), NAME_COLUMN_POSITION).toString();
-				reportModel.setName(name);
+				model.setName(name);
 				String date = view.getMainPanel().getReportPanel().getReportTable().getValueAt(view.getMainPanel().getReportPanel().getReportTable().getSelectedRow(), DATE_COULMN_POSITION).toString();
-				reportModel.setStartDate(date);
+				model.setStartDate(date);
 				
-				reportModel.setChangedAndNotifyObservers();
+				model.setChangedAndNotifyObservers();
 				LOGGER.info("Report panel name {}", name);
 				LOGGER.info("Report panel date {}", date);
 	        }
@@ -68,25 +71,24 @@ public class ApplicationController {
 
 	private void addMenuItemsListeners() {
 		view.getSaveItem().addActionListener(event -> {
-			LOGGER.info("model contains " + reportModel.getId() + " " + reportModel.getTimeByDays());
+			ReportDao dao = new ReportDao();
+//			LOGGER.info("model contains " + reportModel.getRowId() + " " + reportModel.getTimeByDays());
 			
-			ReportEntity reportEntity = new ReportEntity(reportModel.getId(), reportModel.getTimeByDays());
-			dao.convertObjectToXML(reportEntity, PATH_TO_FILE.getValue());
+			dao.convertObjectToXML(entity, PATH_TO_FILE.getValue());
 			
 			LOGGER.info("save button pushed");
 		});
 
 		view.getLoadItem().addActionListener(event -> {
+			ReportDao dao = new ReportDao();
 			ReportEntity fileReport = dao.convertXMLToObject(PATH_TO_FILE.getValue());
-			reportModel.setId(fileReport.getId());
-			reportModel.setTimeByDays(fileReport.getTimeByDays());
-//			, "", "", NO_ROW_TO_SELECT, 
-			reportModel.setActionName(event.getActionCommand());
-			reportModel.setName("");
-			reportModel.setStartDate("");
-			reportModel.setRowId(1);
+//			reportModel.setTimeByDays(fileReport.getTimeByDays());
+			model.setActionName(event.getActionCommand());
+			model.setName("");
+			model.setStartDate("");
+			model.setRowId(1);
 			
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
 			LOGGER.info("load button pushed");
 		});
 
@@ -103,23 +105,23 @@ public class ApplicationController {
 		
 		view.getStartItem().addActionListener(event -> {
 			String date = LocalDateTime.now().toString();
-			reportModel.setStartDate(date);
+			model.setStartDate(date);
 			String actionName = event.getActionCommand();
-			reportModel.setActionName(actionName);
+			model.setActionName(actionName);
 			
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
 			LOGGER.info("start button pushed");
 		});
 		
 		view.getStopItem().addActionListener(event -> {
 			int rowId = view.getMainPanel().getReportPanel().getReportTable().getSelectedRow();
-			reportModel.setRowId(rowId);
+			model.setRowId(rowId);
 			String date = LocalDateTime.now().toString();
-			reportModel.setEndDate(date);
+			model.setEndDate(date);
 			String actionName = event.getActionCommand();
-			reportModel.setActionName(actionName);
+			model.setActionName(actionName);
 			
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
 			LOGGER.info("stop button pushed");
 		});
 	}
@@ -129,24 +131,27 @@ public class ApplicationController {
 			String name = mainPanel.getButtonPanel().getNameField().getText();
 			String date = LocalDateTime.now().toString();
 			String actionName = event.getActionCommand();
-			
-			reportModel.setName(name);
-			reportModel.setStartDate(date);
-			reportModel.getTimeByDays().put(name, date);
-			reportModel.setActionName(actionName);
+			int rowId = mainPanel.getReportPanel().getReportTable().getSelectedRow();
+			model.setName(name);
+			model.setStartDate(date);
+			model.setRowId(rowId);
+			System.out.println(rowId);
+			model.setActionName(actionName);
 
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
+			
 			LOGGER.info("add button pushed");
 		});
 
 		mainPanel.getButtonPanel().getRemoveButton().addActionListener(event -> {
 			int rowId = mainPanel.getReportPanel().getReportTable().getSelectedRow();
+			System.out.println(rowId);
 			String actionName = event.getActionCommand();
+			System.out.println(rowId);
+			model.setRowId(rowId);
+			model.setActionName(actionName);
 			
-			reportModel.setRowId(rowId);
-			reportModel.setActionName(actionName);
-			
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
 			LOGGER.info("remove button pushed");
 		});
 
@@ -155,13 +160,13 @@ public class ApplicationController {
 			String actionName = event.getActionCommand();
 			String name = mainPanel.getButtonPanel().getNameField().getText();
 			String date = mainPanel.getButtonPanel().getDateField().getText();
+			System.out.println(rowId);
+			model.setRowId(rowId);
+			model.setActionName(actionName);
+			model.setName(name);
+			model.setStartDate(date);
 
-			reportModel.setRowId(rowId);
-			reportModel.setActionName(actionName);
-			reportModel.setName(name);
-			reportModel.setStartDate(date);
-
-			reportModel.setChangedAndNotifyObservers();
+			model.setChangedAndNotifyObservers();
 			LOGGER.info("update button pushed");
 		});
 	}

@@ -18,8 +18,8 @@ public final class TimeCounter {
 		return LocalDateTime.now();
 	}
 	
-	public Duration getTimeDifference() {
-		return Duration.between(startTime, LocalDateTime.now());
+	public Duration getTimeDifference(LocalDateTime startTime, LocalDateTime endTime) {
+		return Duration.between(startTime, endTime);
 	}
 
 }

@@ -6,7 +6,9 @@ import java.util.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.desktopmanager.model.Report;
+import com.desktopmanager.model.Event;
+import com.desktopmanager.persistence.EventEntity;
+import com.desktopmanager.persistence.ReportEntity;
 import com.desktopmanager.view.ApplicationFrame;
 
 /**
@@ -23,10 +25,13 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 	private static final String START = "Start";
 	private static final String LOAD = "Load file";
 	private static final String STOP = "Stop";
-	private final Report model;
+	private final Event model;
+	private final ReportEntity entity;
 
-	public ViewMapper(Report model) {
+
+	public ViewMapper(Event model, ReportEntity entity) {
 		this.model = model;
+		this.entity = entity;
 		this.model.addObserver(this);
 	}
 
@@ -55,6 +60,8 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 			LOGGER.info("Added");
 			String[] row = { model.getName(), model.getStartDate() };
 			getMainPanel().getReportPanel().getTableModel().addRow(row);
+			EventEntity modelEvent = new EventEntity(model.getName(), model.getStartDate(), null);
+			entity.getEvents().put(model.getRowId().toString(), modelEvent);
 			break;
 		case UPDATE:
 			LOGGER.info("Updated");
@@ -98,7 +105,7 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 			if (model.getStartDate() != null) {
 				getMainPanel().getReportPanel().getTableModel().setValueAt(model.getStartDate(), rowId, 1);
 			}
-			if (model.getEndDate() != null && !"".equals(model.getEndDate())) {
+			if (model.getEndDate() != null && !EMPTY_STRING.equals(model.getEndDate())) {
 				getMainPanel().getReportPanel().getTableModel().setValueAt(model.getStartDate(), rowId, 2);
 			}
 		}

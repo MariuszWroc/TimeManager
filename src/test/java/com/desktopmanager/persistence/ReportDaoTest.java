@@ -20,10 +20,10 @@ public class ReportDaoTest {
 
 	@Test
 	public void testConvertObjectToXML() {
-		Map<String, String> timeByDays = new HashMap<>();
-		timeByDays.put("1", "value");
+		Map<String, EventEntity> timeByDays = new HashMap<>();
+		timeByDays.put("1", new EventEntity("name", "startDate", "endDate"));
 		String id = "1";
-		ReportEntity entity = new ReportEntity(id , timeByDays);
+		ReportEntity entity = new ReportEntity(id, timeByDays);
 		dao.convertObjectToXML(entity, path);
 	}
 
