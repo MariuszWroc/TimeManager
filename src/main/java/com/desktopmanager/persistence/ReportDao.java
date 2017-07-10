@@ -5,5 +5,4 @@ package com.desktopmanager.persistence;
  *
  */
 public class ReportDao extends XmlProvider<ReportEntity>{
-
 }

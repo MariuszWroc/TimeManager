@@ -23,7 +23,7 @@ public class ReportDaoTest {
 		Map<String, EventEntity> timeByDays = new HashMap<>();
 		timeByDays.put("1", new EventEntity("name", "startDate", "endDate"));
 		String id = "1";
-		ReportEntity entity = new ReportEntity(id, timeByDays);
+		ReportEntity entity = new ReportEntity(new Integer(id), timeByDays);
 		dao.convertObjectToXML(entity, path);
 	}
 

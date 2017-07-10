@@ -15,9 +15,11 @@ import javax.swing.JMenuItem;
 @SuppressWarnings("serial")
 public class ApplicationFrame extends JFrame{
 	private final MainPanel mainPanel = new MainPanel();
+	private final UserPanel userPanel = new UserPanel();
 	private final JMenuItem loadItem = new JMenuItem("Load file");
 	private final JMenuItem saveItem = new JMenuItem("Save file");
 	private final JMenuItem settingsItem = new JMenuItem("Choose file");
+	private final JMenuItem userItem = new JMenuItem("User profile");
 	private final JMenuItem startItem = new JMenuItem("Start");
 	private final JMenuItem stopItem = new JMenuItem("Stop");
 
@@ -49,12 +51,17 @@ public class ApplicationFrame extends JFrame{
 		settingsMenu.add(saveItem);
 		settingsMenu.addSeparator();
 		settingsMenu.add(settingsItem);
+		settingsMenu.add(userItem);
 		
 		return settingsMenu;
 	}
 
 	public MainPanel getMainPanel() {
 		return mainPanel;
+	}
+	
+	public UserPanel getUserPanel() {
+		return userPanel;
 	}
 
 	public JMenuItem getLoadItem() {
@@ -68,6 +75,10 @@ public class ApplicationFrame extends JFrame{
 	public JMenuItem getSettingsItem() {
 		return settingsItem;
 	}
+	
+	public JMenuItem getUserItem() {
+		return userItem;
+	}
 
 	public JMenuItem getStartItem() {
 		return startItem;
@@ -76,5 +87,5 @@ public class ApplicationFrame extends JFrame{
 	public JMenuItem getStopItem() {
 		return stopItem;
 	}
-	
+
 }

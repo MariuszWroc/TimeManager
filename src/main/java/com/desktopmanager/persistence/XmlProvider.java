@@ -71,8 +71,6 @@ public abstract class XmlProvider<T> {
 		return stringWriter;
 	}
 
-	
-
 	@SuppressWarnings("unchecked")
 	public T convertXMLToObject(String path) {
 		LOGGER.info("convertXMLToObject");

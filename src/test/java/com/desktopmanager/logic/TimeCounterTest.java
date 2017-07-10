@@ -31,7 +31,9 @@ public class TimeCounterTest {
 
 	@Test
 	public void testGetTimeDifference() {
-		Duration timeDifference = counter.getTimeDifference();
+		LocalDateTime startTime = null;
+		LocalDateTime endTime = null;
+		Duration timeDifference = counter.getTimeDifference(startTime, endTime);
 		Long seconds = timeDifference.getSeconds();
 		LOGGER.info(seconds.toString());
 	}

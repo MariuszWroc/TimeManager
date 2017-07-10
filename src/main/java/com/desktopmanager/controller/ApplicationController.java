@@ -7,6 +7,7 @@ import static com.desktopmanager.constant.FrameSettings.WIDTH;
 import java.awt.Dimension;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JFileChooser;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.desktopmanager.model.Event;
+import com.desktopmanager.persistence.EventEntity;
 import com.desktopmanager.persistence.ReportDao;
 import com.desktopmanager.persistence.ReportEntity;
 import com.desktopmanager.view.MainPanel;
@@ -34,6 +36,7 @@ public class ApplicationController {
 	private ViewMapper view;
 	private ReportEntity entity;
 	private AtomicInteger counter = new AtomicInteger(1);
+	ReportDao dao = new ReportDao();
 
 	public ApplicationController() {
 		model = new Event();
@@ -71,8 +74,8 @@ public class ApplicationController {
 
 	private void addMenuItemsListeners() {
 		view.getSaveItem().addActionListener(event -> {
-			ReportDao dao = new ReportDao();
-//			LOGGER.info("model contains " + reportModel.getRowId() + " " + reportModel.getTimeByDays());
+			model.setActionName("Save file");
+			model.setChangedAndNotifyObservers();
 			
 			dao.convertObjectToXML(entity, PATH_TO_FILE.getValue());
 			
@@ -80,16 +83,20 @@ public class ApplicationController {
 		});
 
 		view.getLoadItem().addActionListener(event -> {
-			ReportDao dao = new ReportDao();
-			ReportEntity fileReport = dao.convertXMLToObject(PATH_TO_FILE.getValue());
-//			reportModel.setTimeByDays(fileReport.getTimeByDays());
-			model.setActionName(event.getActionCommand());
-			model.setName("");
-			model.setStartDate("");
-			model.setRowId(1);
+			model.setActionName("Load file");
 			
-			model.setChangedAndNotifyObservers();
-			LOGGER.info("load button pushed");
+			entity = dao.convertXMLToObject(PATH_TO_FILE.getValue());
+			Map<String, EventEntity> events = entity.getEvents();
+			LOGGER.info("events model " + events.toString());
+			events.forEach((k,v) -> {
+				model.setRowId(new Integer(k));
+				model.setName(v.getName());
+				model.setStartDate(v.getStartDate());
+				model.setEndDate(v.getEndDate());
+				model.setChangedAndNotifyObservers();
+			});
+			
+			LOGGER.info("load button pushed ");
 		});
 
 		view.getSettingsItem().addActionListener(event -> {
@@ -101,6 +108,15 @@ public class ApplicationController {
 				File selectedFile = fileChooser.getSelectedFile();
 				LOGGER.info("Selected file: " + selectedFile.getAbsolutePath());
 			}
+		});
+		
+		view.getUserItem().addActionListener(event -> {
+			view.getMainPanel().setVisible(false);
+			view.getContentPane().removeAll();
+			view.getContentPane().add(view.getUserPanel());
+			view.getContentPane().invalidate();
+			view.getContentPane().validate();
+			LOGGER.info("user view button pushed");
 		});
 		
 		view.getStartItem().addActionListener(event -> {

@@ -1,5 +1,9 @@
 package com.desktopmanager.controller;
 
+import static com.desktopmanager.constant.DefaultValues.PATH_TO_FILE;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -8,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.desktopmanager.model.Event;
 import com.desktopmanager.persistence.EventEntity;
+import com.desktopmanager.persistence.ReportDao;
 import com.desktopmanager.persistence.ReportEntity;
 import com.desktopmanager.view.ApplicationFrame;
 
@@ -24,10 +29,10 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 	private static final String EMPTY_STRING = "";
 	private static final String START = "Start";
 	private static final String LOAD = "Load file";
+	private static final String SAVE = "Save file";
 	private static final String STOP = "Stop";
 	private final Event model;
 	private final ReportEntity entity;
-
 
 	public ViewMapper(Event model, ReportEntity entity) {
 		this.model = model;
@@ -55,13 +60,12 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 	}
 
 	private void updateModelByCommand() {
+		LOGGER.info(model.getActionName());
 		switch (model.getActionName()) {
 		case ADD:
 			LOGGER.info("Added");
-			String[] row = { model.getName(), model.getStartDate() };
-			getMainPanel().getReportPanel().getTableModel().addRow(row);
-			EventEntity modelEvent = new EventEntity(model.getName(), model.getStartDate(), null);
-			entity.getEvents().put(model.getRowId().toString(), modelEvent);
+			String[] addedRow = { model.getName(), model.getStartDate() };
+			getMainPanel().getReportPanel().getTableModel().addRow(addedRow);
 			break;
 		case UPDATE:
 			LOGGER.info("Updated");
@@ -76,8 +80,25 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 			getMainPanel().getButtonPanel().getDateField().setText(model.getName());
 			break;
 		case LOAD:
-			LOGGER.info("Load file");
-			getMainPanel().getButtonPanel().getDateField().setText(model.getName());
+			String[] loadedRow = { model.getName(), model.getStartDate(), model.getEndDate() };
+			getMainPanel().getReportPanel().getTableModel().addRow(loadedRow);
+			break;
+		case SAVE:
+			LOGGER.info("events model ");
+			Map<String, EventEntity> eventsToSave = new HashMap<>();
+			int rowCount = getMainPanel().getReportPanel().getTableModel().getRowCount();
+			for(int i = 0; i < rowCount; i++) {
+				String endDate = "";
+				String name = getMainPanel().getReportPanel().getTableModel().getValueAt(i, 0).toString();
+				String startDate = getMainPanel().getReportPanel().getTableModel().getValueAt(i, 1).toString();
+				if (getMainPanel().getReportPanel().getTableModel().getValueAt(i, 2) != null) {
+					endDate = getMainPanel().getReportPanel().getTableModel().getValueAt(i, 2).toString();
+				}
+				EventEntity oneEvent = new EventEntity(name, startDate, endDate);
+				eventsToSave.put(new Integer(i).toString(), oneEvent);
+			}
+
+			entity.setEvents(eventsToSave);
 			break;
 		case STOP:
 			LOGGER.info("Stop");
