@@ -8,12 +8,13 @@ import java.util.Observable;
  *
  */
 
-public class Event extends Observable {
+public class ViewModel extends Observable {
 	private Integer rowId;
 	private String name;
 	private String startDate;
 	private String endDate;
 	private String actionName;
+	private UserViewModel user;
 
 	public String getName() {
 		return name;
@@ -58,6 +59,15 @@ public class Event extends Observable {
 
 	public void setActionName(String actionName) {
 		this.actionName = actionName;
+	}
+	
+	@Transient
+	public UserViewModel getUser() {
+		return user;
+	}
+
+	public void setUser(UserViewModel user) {
+		this.user = user;
 	}
 
 	@Override

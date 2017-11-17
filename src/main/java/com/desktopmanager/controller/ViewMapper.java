@@ -1,7 +1,5 @@
 package com.desktopmanager.controller;
 
-import static com.desktopmanager.constant.DefaultValues.PATH_TO_FILE;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -10,9 +8,8 @@ import java.util.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.desktopmanager.model.Event;
+import com.desktopmanager.model.ViewModel;
 import com.desktopmanager.persistence.EventEntity;
-import com.desktopmanager.persistence.ReportDao;
 import com.desktopmanager.persistence.ReportEntity;
 import com.desktopmanager.view.ApplicationFrame;
 
@@ -31,10 +28,12 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 	private static final String LOAD = "Load file";
 	private static final String SAVE = "Save file";
 	private static final String STOP = "Stop";
-	private final Event model;
+	private static final String PROFILE = "Change user";
+	private static final String CHANGE = "Change day";
+	private final ViewModel model;
 	private final ReportEntity entity;
 
-	public ViewMapper(Event model, ReportEntity entity) {
+	public ViewMapper(ViewModel model, ReportEntity entity) {
 		this.model = model;
 		this.entity = entity;
 		this.model.addObserver(this);
@@ -52,7 +51,7 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 		} else {
 			updateModelByCommand();
 		}
-		
+
 		refreshNameAndDate();
 	}
 
@@ -79,15 +78,20 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 			LOGGER.info("Start");
 			getMainPanel().getButtonPanel().getDateField().setText(model.getName());
 			break;
+		case STOP:
+			LOGGER.info("Stop");
+			updateRow(model.getRowId());
+			break;
 		case LOAD:
+			LOGGER.info("Load");
 			String[] loadedRow = { model.getName(), model.getStartDate(), model.getEndDate() };
 			getMainPanel().getReportPanel().getTableModel().addRow(loadedRow);
 			break;
 		case SAVE:
-			LOGGER.info("events model ");
+			LOGGER.info("Save");
 			Map<String, EventEntity> eventsToSave = new HashMap<>();
 			int rowCount = getMainPanel().getReportPanel().getTableModel().getRowCount();
-			for(int i = 0; i < rowCount; i++) {
+			for (int i = 0; i < rowCount; i++) {
 				String endDate = "";
 				String name = getMainPanel().getReportPanel().getTableModel().getValueAt(i, 0).toString();
 				String startDate = getMainPanel().getReportPanel().getTableModel().getValueAt(i, 1).toString();
@@ -100,9 +104,15 @@ public class ViewMapper extends ApplicationFrame implements Observer {
 
 			entity.setEvents(eventsToSave);
 			break;
-		case STOP:
-			LOGGER.info("Stop");
-			updateRow(model.getRowId());
+		case PROFILE:
+			LOGGER.info("User profile accepted");
+			getUserPanel().setVisible(false);
+			getMainPanel().setVisible(true);
+			getContentPane().invalidate();
+			getContentPane().validate();
+			break;
+		case CHANGE:
+			LOGGER.info("Day changed");
 			break;
 		}
 	}

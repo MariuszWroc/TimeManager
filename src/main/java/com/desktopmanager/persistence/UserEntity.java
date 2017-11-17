@@ -3,30 +3,32 @@ package com.desktopmanager.persistence;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Mariusz Czarny
  */
 @XmlRootElement
-public final class User implements Serializable {
+@XmlType(propOrder={"id", "firstname", "lastname", "fileAddress"})
+public final class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String firstname;
 	private String lastname;
 	private String fileAddress;
 
-	public User() {
+	public UserEntity() {
 	}
 
-	public User(Integer id, String firstname, String lastname, String email) {
+	public UserEntity(Integer id, String firstname, String lastname, String email) {
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.fileAddress = email;
 	}
 
-	public User(String firstname, String lastname, String email) {
+	public UserEntity(String firstname, String lastname, String email) {
 		this.id = 0;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -89,7 +91,7 @@ public final class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserEntity other = (UserEntity) obj;
 		if (fileAddress == null) {
 			if (other.fileAddress != null)
 				return false;

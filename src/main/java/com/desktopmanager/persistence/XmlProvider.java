@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.desktopmanager.util.FileUtilFactory;
+import com.desktopmanager.util.FileUtil;
 
 /**
  *
@@ -47,12 +47,7 @@ public abstract class XmlProvider<T> {
 		LOGGER.info("convertObjectToXML with path {}", path);
 		try {
 			LOGGER.info("start writing..");
-			try {
-				FileUtilFactory.getIsFile(path);
-				// checkDirectory(directory);
-			} catch (IOException e) {
-				LOGGER.info(e.getMessage() + ", " + e);
-			}
+			checkIsFileExist(path);
 
 			File file = new File(path);
 
@@ -69,6 +64,15 @@ public abstract class XmlProvider<T> {
 		}
 
 		return stringWriter;
+	}
+
+	private void checkIsFileExist(String path) {
+		try {
+			FileUtil.useFileUtil(path).isFile();
+			// checkDirectory(directory);
+		} catch (IOException e) {
+			LOGGER.info(e.getMessage() + ", " + e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

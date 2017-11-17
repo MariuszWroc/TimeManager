@@ -3,19 +3,17 @@ package com.desktopmanager.logic;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * @author Mariusz Czarny
+ *
+ */
 public final class TimeCounter {
-	private final LocalDateTime startTime;
 	
-	public TimeCounter() {
-		startTime = LocalDateTime.now(); 
-	}
-	
-	public LocalDateTime getStartTime() {
-		return startTime;
+	private TimeCounter() {
 	}
 
-	public LocalDateTime getActualTime() {
-		return LocalDateTime.now();
+	public static String getActualTime() {
+		return LocalDateTime.now().toString();
 	}
 	
 	public Duration getTimeDifference(LocalDateTime startTime, LocalDateTime endTime) {

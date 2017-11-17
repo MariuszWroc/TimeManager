@@ -1,7 +1,6 @@
 package com.desktopmanager.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.time.LocalDateTime;
 
 import javax.swing.JButton;
@@ -26,18 +25,18 @@ public final class ButtonPanel extends JPanel {
 
 	public ButtonPanel() {
 		addButton = new JButton("Add");
-		addButton.setPreferredSize(new Dimension(100, 20));
+		UISettingsHelper.setDimension(100, 20).setJButtonSize(addButton);
 		removeButton = new JButton("Remove");
-		removeButton.setPreferredSize(new Dimension(100, 20));
+		UISettingsHelper.setDimension(100, 20).setJButtonSize(removeButton);
 		updateButton = new JButton("Update");
-		updateButton.setPreferredSize(new Dimension(100, 20));
+		UISettingsHelper.setDimension(100, 20).setJButtonSize(updateButton);
 		nameField = new JTextField();
-		nameField.setPreferredSize(new Dimension(200, 20));
+		UISettingsHelper.setDimension(200, 20).setTextFieldSize(nameField);
 		nameField.setToolTipText("Zdarzenie");
 		dateField = new JTextField();
 		dateField.setText(LocalDateTime.now().toString());
 		dateField.setEnabled(false);
-		dateField.setPreferredSize(new Dimension(200, 20));
+		UISettingsHelper.setDimension(200, 20).setTextFieldSize(dateField);
 		dateField.setToolTipText("Czas");
 		buildPanel();
 	}

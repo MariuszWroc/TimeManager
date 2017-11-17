@@ -22,17 +22,25 @@ public class ApplicationFrame extends JFrame{
 	private final JMenuItem userItem = new JMenuItem("User profile");
 	private final JMenuItem startItem = new JMenuItem("Start");
 	private final JMenuItem stopItem = new JMenuItem("Stop");
+	private final JMenuItem actualDayItem  = new JMenuItem("Actual day");
+	private final JMenuItem actualMonthItem  = new JMenuItem("Actual month");
 
 	public ApplicationFrame() {
-		addMenuBar(setSettings(), setTimer());
+		addMenuBar();
 		
 		getContentPane().add(mainPanel , BorderLayout.CENTER);
 	}
 
-	private void addMenuBar(JMenu settingsMenu, JMenu timerMenu) {
+	private void addMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
+		JMenu settingsMenu = setSettings();
+		JMenu timerMenu = setTimer();
+		JMenu calendarMenu = setCalendar();
+		
 		menuBar.add(settingsMenu);
 		menuBar.add(timerMenu);
+		menuBar.add(calendarMenu);
+		
 		this.setJMenuBar(menuBar);
 	}
 
@@ -54,6 +62,15 @@ public class ApplicationFrame extends JFrame{
 		settingsMenu.add(userItem);
 		
 		return settingsMenu;
+	}
+	
+	private JMenu setCalendar() {
+		JMenu calendarMenu = new JMenu("Calendar");
+
+		calendarMenu.add(actualDayItem);
+		calendarMenu.add(actualMonthItem);
+		
+		return calendarMenu;
 	}
 
 	public MainPanel getMainPanel() {
@@ -86,6 +103,14 @@ public class ApplicationFrame extends JFrame{
 
 	public JMenuItem getStopItem() {
 		return stopItem;
+	}
+
+	public JMenuItem getActualDayItem() {
+		return actualDayItem;
+	}
+
+	public JMenuItem getActualMonthItem() {
+		return actualMonthItem;
 	}
 
 }

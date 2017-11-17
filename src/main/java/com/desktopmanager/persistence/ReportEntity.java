@@ -20,8 +20,7 @@ public class ReportEntity implements Serializable{
 	/**
 	 *  Requeired by JAXB
 	 */
-	@SuppressWarnings("unused")
-	private ReportEntity() {
+	public ReportEntity() {
 	}
 	
 	public ReportEntity(Integer id) {

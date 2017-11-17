@@ -6,7 +6,8 @@ package com.desktopmanager.constant;
  */
 public enum DefaultValues {
 	TITLE("Aplikacja"),
-	PATH_TO_FILE("/Users/czarnym/test.txt");
+	PATH_TO_FILE("/Users/czarnym/test.txt"),
+	CONFIG_FILE("/Users/czarnym/config.properties");
 	
 	private final String value;
 	

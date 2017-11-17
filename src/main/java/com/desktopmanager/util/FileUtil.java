@@ -13,10 +13,19 @@ import org.slf4j.LoggerFactory;
  * @author Mariusz Czarny
  *
  */
-public class FileUtil {
+public final class FileUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class.getName());
+	private final String path;
 	
-	public boolean isCatalog(String path) throws IOException {
+	private FileUtil(String path) {
+		this.path = path;
+	}
+	
+	public static FileUtil useFileUtil(String path) {
+		return new FileUtil(path);
+	}
+	
+	public boolean isCatalog() throws IOException {
 		Path fileLocator = Paths.get(path);
 		if (Files.isDirectory(fileLocator)) {
 			LOGGER.info("Path {} is a directory.", path);
@@ -27,7 +36,7 @@ public class FileUtil {
 		}
 	}
 
-	public boolean isFile(String path) throws IOException {
+	public boolean isFile() throws IOException {
 		Path fileLocator = Paths.get(path);
 		if (Files.exists(fileLocator, LinkOption.NOFOLLOW_LINKS)) {
 			LOGGER.info("File {} exist.", path);
@@ -42,7 +51,7 @@ public class FileUtil {
 		}
 	}
 	
-	public boolean deleteFile(String path) throws IOException {
+	public boolean deleteFile() throws IOException {
 		Path fileLocator = Paths.get(path);
 
 		if (Files.deleteIfExists(fileLocator)) {

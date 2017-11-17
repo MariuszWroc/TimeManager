@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,12 @@ public class FileUtilTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		String applicationPath = new File(".").getCanonicalPath();
-		fileUtil = new FileUtil();
 		catalogPath = applicationPath + "/src/test/resources/";
 		filePath = catalogPath + "testFile.txt";
 		fileToDeletePath = catalogPath + "fileToRemove.txt";
 		wrongPath = catalogPath + "nofile.txt";
+		fileUtil = FileUtil.useFileUtil(filePath);
+		
 		logger.info(filePath);
 		
 		logger.info(catalogPath);
@@ -35,32 +37,33 @@ public class FileUtilTest {
 
 	@Test
 	public void testIsCatalog() throws IOException {
-		assertEquals(true, fileUtil.isCatalog(catalogPath));
+		assertEquals(true, fileUtil.isCatalog());
 	}
 
 	@Test
 	public void testIsFile() throws IOException {
-		assertEquals(true, fileUtil.isFile(filePath));
+		assertEquals(true, fileUtil.isFile());
 	}
 
 	@Test
+	@Ignore
 	public void testCanDeleteFile() throws IOException {
-//		assertEquals(true, fileUtil.deleteFile(fileToDeletePath));
+		assertEquals(true, fileUtil.deleteFile());
 	}
 	
 	@Test
 	public void testIsNotCatalog() throws IOException {
-		assertEquals(false, fileUtil.isCatalog(filePath));
+		assertEquals(false, fileUtil.isCatalog());
 	}
 
 	@Test
 	public void testIsNotFile() throws IOException {
-		assertEquals(false, fileUtil.isFile(wrongPath));
+		assertEquals(false, fileUtil.isFile());
 	}
 
 	@Test
 	public void testCannotDeleteFile() throws IOException {
-		assertEquals(false, fileUtil.deleteFile(wrongPath));
+		assertEquals(false, fileUtil.deleteFile());
 	}
 
 }
