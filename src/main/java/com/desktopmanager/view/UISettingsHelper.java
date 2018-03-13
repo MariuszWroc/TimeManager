@@ -2,8 +2,7 @@ package com.desktopmanager.view;
 
 import java.awt.Dimension;
 
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import javax.swing.JComponent;
 
 public final class UISettingsHelper {
 	private final Dimension dimension;
@@ -16,11 +15,8 @@ public final class UISettingsHelper {
 		return new UISettingsHelper(width, height);
 	}
 	
-	public void setTextFieldSize(JTextField textField) {
-		textField.setPreferredSize(dimension);
+	public void setComponentSize(JComponent component) {
+		component.setPreferredSize(dimension);
 	}
 	
-	public void setJButtonSize(JButton button) {
-		button.setPreferredSize(dimension);
-	}
 }

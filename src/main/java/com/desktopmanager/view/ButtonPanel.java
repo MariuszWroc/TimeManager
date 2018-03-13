@@ -1,12 +1,12 @@
 package com.desktopmanager.view;
 
 import java.awt.Component;
-import java.time.LocalDateTime;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.desktopmanager.logic.TimeCounter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -25,18 +25,18 @@ public final class ButtonPanel extends JPanel {
 
 	public ButtonPanel() {
 		addButton = new JButton("Add");
-		UISettingsHelper.setDimension(100, 20).setJButtonSize(addButton);
+		UISettingsHelper.setDimension(100, 20).setComponentSize(addButton);
 		removeButton = new JButton("Remove");
-		UISettingsHelper.setDimension(100, 20).setJButtonSize(removeButton);
+		UISettingsHelper.setDimension(100, 20).setComponentSize(removeButton);
 		updateButton = new JButton("Update");
-		UISettingsHelper.setDimension(100, 20).setJButtonSize(updateButton);
+		UISettingsHelper.setDimension(100, 20).setComponentSize(updateButton);
 		nameField = new JTextField();
-		UISettingsHelper.setDimension(200, 20).setTextFieldSize(nameField);
+		UISettingsHelper.setDimension(200, 20).setComponentSize(nameField);
 		nameField.setToolTipText("Zdarzenie");
 		dateField = new JTextField();
-		dateField.setText(LocalDateTime.now().toString());
+		dateField.setText(TimeCounter.getActualTime());
 		dateField.setEnabled(false);
-		UISettingsHelper.setDimension(200, 20).setTextFieldSize(dateField);
+		UISettingsHelper.setDimension(200, 20).setComponentSize(dateField);
 		dateField.setToolTipText("Czas");
 		buildPanel();
 	}

@@ -7,7 +7,9 @@ package com.desktopmanager.constant;
 public enum DefaultValues {
 	TITLE("Aplikacja"),
 	PATH_TO_FILE("/Users/czarnym/test.txt"),
-	CONFIG_FILE("/Users/czarnym/config.properties");
+	CONFIG_FILE("/Users/czarnym/config.properties"),
+	TIME_FORMAT("HH:mm:ss"),
+	DATE_FORMAT("yyyy-MM-dd");
 	
 	private final String value;
 	

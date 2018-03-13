@@ -18,9 +18,9 @@ public class UserFormPanel extends JPanel{
 	
 	public UserFormPanel() {
 		firstNameTextField = new JTextField();
-		UISettingsHelper.setDimension(200, 20).setTextFieldSize(firstNameTextField);
+		UISettingsHelper.setDimension(200, 20).setComponentSize(firstNameTextField);
 		lastNameTextField = new JTextField();
-		UISettingsHelper.setDimension(200, 20).setTextFieldSize(lastNameTextField);
+		UISettingsHelper.setDimension(200, 20).setComponentSize(lastNameTextField);
 		buildPanel();
 	}
 	

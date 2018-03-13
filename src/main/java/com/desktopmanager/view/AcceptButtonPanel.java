@@ -15,7 +15,7 @@ public class AcceptButtonPanel extends JPanel{
 	
 	public AcceptButtonPanel() {
 		acceptButton = new JButton("OK");
-		UISettingsHelper.setDimension(100, 20).setJButtonSize(acceptButton);
+		UISettingsHelper.setDimension(100, 20).setComponentSize(acceptButton);
 		
 		buildButtonPanel();
 	}
